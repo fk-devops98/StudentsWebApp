@@ -1,0 +1,148 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button
+                            pButton
+                            pRipple
+                            label="New"
+                            icon="pi pi-plus"
+                            class="p-button-success mr-2"
+                            (click)="newStudent()"
+                        ></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button
+                        pButton
+                        pRipple
+                        label="Export Excel"
+                        icon="pi pi-upload"
+                        class="p-button-help"
+                        (click)="dtStudents.exportCSV()"
+                    ></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table
+                #dtStudents
+                [value]="students"
+                [columns]="columnsTable"
+                responsiveLayout="scroll"
+                [rows]="10"
+                [globalFilterFields]="[
+                    'username',
+                    'firstName',
+                    'lastName',
+                    'age',
+                    'career'
+                ]"
+                [rows]="10"
+                [paginator]="true"
+                [rowsPerPageOptions]="[10, 20, 30]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedItem"
+                selectionMode="single"
+                [rowHover]="true"
+                dataKey="id"
+            >
+                <ng-template pTemplate="caption">
+                    <div
+                        class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
+                    >
+                        <h5 class="m-0">Manage Students</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input
+                                pInputText
+                                type="text"
+                                (input)="onGlobalFilter(dtStudents, $event)"
+                                placeholder="Search..."
+                                class="w-full sm:w-auto"
+                            />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="username">
+                            UserName <p-sortIcon field="username"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="firstName">
+                            First Name
+                            <p-sortIcon field="firstName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="lastName">
+                            Last Name <p-sortIcon field="lastName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="age">
+                            Age <p-sortIcon field="age"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="career">
+                            Career <p-sortIcon field="career"></p-sortIcon>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-student>
+                    <tr>
+                        <td class="col-2">
+                            <span class="p-column-title">UserName</span>
+                            {{ student.username }}
+                        </td>
+                        <td class="col-2">
+                            <span class="p-column-title">firstName</span>
+                            {{ student.firstName }}
+                        </td>
+
+                        <td class="col-2">
+                            <span class="p-column-title">lastName</span>
+                            {{ student.lastName }}
+                        </td>
+                        <td class="col-2">
+                            <span class="p-column-title">age</span>
+                            {{ student.age }}
+                        </td>
+                        <td class="col-2">
+                            <span class="p-column-title">career</span>
+                            {{ student.career }}
+                        </td>
+                        <td class="col-2">
+                            <div class="flex">
+                                <button
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editStudent(student)"
+                                ></button>
+                                <button
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-trash"
+                                    class="p-button-rounded p-button-warning"
+                                    (click)="deleteStudent(student)"
+                                ></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog
+    header="Confirm"
+    key="confirm1"
+    icon="pi pi-exclamation-triangle"
+    message="¿Are you sure to eliminate the student?"
+    [style]="{ width: '350px' }"
+    acceptButtonStyleClass="p-button-text"
+    rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
